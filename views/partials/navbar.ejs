@@ -1,0 +1,31 @@
+<nav class="navbar" id="mainNav">
+  <a href="/landing" class="nav-brand">
+    <div class="nav-logo-icon">
+      <i class="bi bi-play-circle-fill"></i>
+    </div>
+    <span class="nav-brand-name">OTACORE</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="/landing" class="<%= page === 'home' ? 'active' : '' %>">Home</a></li>
+    <li><a href="/contenu/anime" class="<%= page === 'anime' ? 'active' : '' %>">Anime</a></li>
+    <li><a href="/contenu/manga" class="<%= page === 'manga' ? 'active' : '' %>">Manga</a></li>
+    <li><a href="/profile/mylist" class="<%= page === 'mylist' ? 'active' : '' %>">My List</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <div class="search-bar">
+      <i class="bi bi-search"></i>
+      <input type="text" placeholder="Search anime, manga..." id="searchInput"/>
+    </div>
+    <a href="#" class="nav-icon-btn">
+      <i class="bi bi-bell"></i>
+    </a>
+    <!-- Toujours afficher l'avatar car navbar = pages connectées uniquement -->
+    <% if (typeof user !== 'undefined' && user) { %>
+      <a href="/profile" class="avatar">
+        <%= user.username.substring(0, 2).toUpperCase() %>
+      </a>
+    <% } %>
+  </div>
+</nav>

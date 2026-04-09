@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OTACORE - My List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body class="landing-body">
+
+  <%- include('partials/navbar') %>
+
+  <!-- Header -->
+  <section class="mylist-header">
+    <h1 class="mylist-title">
+      <i class="bi bi-clock-history"></i> My List
+    </h1>
+    <p class="mylist-subtitle">
+      All your saved anime & manga in one place.
+    </p>
+
+    <!-- Filtres statut -->
+    <div class="mylist-filters">
+      <a href="/profile/mylist" 
+         class="mylist-filter-btn <%= !filter ? 'active' : '' %>">
+        All
+      </a>
+      <a href="/profile/mylist?filter=PLANIFIE" 
+         class="mylist-filter-btn <%= filter === 'PLANIFIE' ? 'active' : '' %>">
+        <i class="bi bi-bookmark"></i> Plan to Watch
+      </a>
+      <a href="/profile/mylist?filter=EN_COURS" 
+         class="mylist-filter-btn <%= filter === 'EN_COURS' ? 'active' : '' %>">
+        <i class="bi bi-play-circle"></i> Watching
+      </a>
+      <a href="/profile/mylist?filter=TERMINE" 
+         class="mylist-filter-btn <%= filter === 'TERMINE' ? 'active' : '' %>">
+        <i class="bi bi-check-circle"></i> Completed
+      </a>
+    </div>
+  </section>
+
+  <!-- Contenu -->
+  <section class="mylist-section">
+    <% if (watchLater && watchLater.length > 0) { %>
+      <div class="mylist-grid">
+        <% watchLater.forEach(item => { %>
+          <div class="mylist-card">
+            <a href="/contenu/<%= item.contenu_id %>" class="mylist-card-img">
+              <img src="<%= item.image_url %>" alt="<%= item.titre %>"/>
+              <div class="mylist-card-type">
+                <% if (item.type === 'ANIME') { %>
+                  <i class="bi bi-play-circle"></i>
+                <% } else { %>
+                  <i class="bi bi-book"></i>
+                <% } %>
+              </div>
+            </a>
+            <div class="mylist-card-info">
+              <h3 class="mylist-card-title"><%= item.titre %></h3>
+              <div class="mylist-card-meta">
+                <span class="mylist-status-badge mylist-status-<%= item.statutSuivi.toLowerCase() %>">
+                  <% if (item.statutSuivi === 'PLANIFIE') { %>
+                    <i class="bi bi-bookmark"></i> Plan to Watch
+                  <% } else if (item.statutSuivi === 'EN_COURS') { %>
+                    <i class="bi bi-play-circle"></i> Watching
+                  <% } else { %>
+                    <i class="bi bi-check-circle"></i> Completed
+                  <% } %>
+                </span>
+              </div>
+              <!-- Changer statut -->
+              <form action="/profile/watchlater/status" method="POST" 
+                    class="mylist-status-form">
+                <input type="hidden" name="contenu_id" value="<%= item.contenu_id %>"/>
+                <select name="statut" onchange="this.form.submit()" 
+                        class="mylist-status-select">
+                  <option value="PLANIFIE"  <%= item.statutSuivi === 'PLANIFIE'  ? 'selected' : '' %>>Plan to Watch</option>
+                  <option value="EN_COURS"  <%= item.statutSuivi === 'EN_COURS'  ? 'selected' : '' %>>Watching</option>
+                  <option value="TERMINE"   <%= item.statutSuivi === 'TERMINE'   ? 'selected' : '' %>>Completed</option>
+                </select>
+              </form>
+            </div>
+            <!-- Supprimer -->
+            <form action="/profile/watchlater/remove" method="POST" 
+                  class="mylist-remove-form">
+              <input type="hidden" name="contenu_id" value="<%= item.contenu_id %>"/>
+              <button type="submit" class="mylist-remove-btn" title="Remove">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty-catalogue">
+        <i class="bi bi-bookmark-x"></i>
+        <p>Your list is empty.</p>
+        <p style="font-size:0.85rem; color: rgba(255,255,255,0.25);">
+          Browse anime & manga and add them to your list !
+        </p>
+        <a href="/contenu/anime" class="btn-explore-content">
+          Explore Anime
+        </a>
+      </div>
+    <% } %>
+  </section>
+
+  <%- include('partials/footer') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/script.js"></script>
+</body>
+</html>

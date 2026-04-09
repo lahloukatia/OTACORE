@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OTACORE - <%= contenu.titre %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body class="landing-body">
+
+  <%- include('partials/navbar') %>
+
+  <!-- ══ HERO DETAILS ══ -->
+  <section class="details-hero">
+    <div class="details-hero-bg"
+         style="background-image: url('<%= contenu.image_url %>')">
+    </div>
+    <div class="details-hero-overlay"></div>
+
+    <div class="details-hero-content">
+
+      <!-- Cover -->
+      <div class="details-cover">
+        <img src="<%= contenu.image_url %>" alt="<%= contenu.titre %>"/>
+      </div>
+
+      <!-- Infos -->
+      <div class="details-main-info">
+
+        <div class="details-type-badge">
+          <% if (contenu.type === 'ANIME') { %>
+            <i class="bi bi-play-circle"></i> Anime
+          <% } else { %>
+            <i class="bi bi-book"></i> Manga
+          <% } %>
+        </div>
+
+        <h1 class="details-title"><%= contenu.titre %></h1>
+
+        <!-- Étoiles -->
+        <div class="details-rating">
+          <%
+            const note = contenu.note || 0;
+            const fullStars = Math.floor(note);
+            const hasHalf = (note % 1) >= 0.5;
+          %>
+          <% for(let i = 1; i <= 5; i++) { %>
+            <% if (i <= fullStars) { %>
+              <i class="bi bi-star-fill star-filled"></i>
+            <% } else if (i === fullStars + 1 && hasHalf) { %>
+              <i class="bi bi-star-half star-filled"></i>
+            <% } else { %>
+              <i class="bi bi-star star-empty"></i>
+            <% } %>
+          <% } %>
+          <span class="rating-value"><%= note %>/5</span>
+        </div>
+
+        <!-- Meta -->
+        <div class="details-meta-row">
+          <span class="details-meta-item">
+            <i class="bi bi-calendar3"></i> <%= contenu.date_sortie %>
+          </span>
+          <span class="details-meta-sep">•</span>
+          <span class="details-meta-item">
+            <i class="bi bi-person"></i> <%= contenu.auteur %>
+          </span>
+          <span class="details-meta-sep">•</span>
+          <span class="details-meta-item <%= contenu.statut === 'EN_COURS' ? 'status-ongoing' : 'status-done' %>">
+            <i class="bi bi-circle-fill" style="font-size:0.5rem;"></i>
+            <%= contenu.statut === 'EN_COURS' ? 'En cours' : 'Terminé' %>
+          </span>
+        </div>
+
+        <!-- Synopsis -->
+        <p class="details-synopsis"><%= contenu.synopsis %></p>
+
+        <!-- Boutons -->
+        <div class="details-actions">
+          <% if (contenu.type === 'ANIME') { %>
+            <% if (contenu.trailer_url) { %>
+              <a href="<%= contenu.trailer_url %>" target="_blank" class="btn-trailer">
+                <i class="bi bi-play-fill"></i> Watch Trailer
+              </a>
+            <% } else { %>
+              <button class="btn-trailer btn-disabled" disabled>
+                <i class="bi bi-play-fill"></i> Trailer not available
+              </button>
+            <% } %>
+          <% } else { %>
+            <a href="/contenu/<%= contenu.id %>/read" class="btn-trailer">
+              <i class="bi bi-book-half"></i> Read First Chapter
+            </a>
+          <% } %>
+
+          <% if (typeof user !== 'undefined' && user) { %>
+            <button class="btn-add-list" onclick="addToWatchLater(<%= contenu.id %>)">
+              <i class="bi bi-plus"></i> My List
+            </button>
+          <% } else { %>
+            <a href="/auth/login" class="btn-add-list">
+              <i class="bi bi-plus"></i> My List
+            </a>
+          <% } %>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ DETAILS GRID ══ -->
+  <section class="details-grid-section">
+    <div class="details-grid">
+
+      <div class="detail-card">
+        <div class="detail-card-icon"><i class="bi bi-tag"></i></div>
+        <div class="detail-card-content">
+          <span class="detail-card-label">Genres</span>
+          <div class="genres-list">
+            <% contenu.genres.forEach(genre => { %>
+              <span class="genre-tag"><%= genre %></span>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-icon">
+          <% if (contenu.type === 'ANIME') { %>
+            <i class="bi bi-collection-play"></i>
+          <% } else { %>
+            <i class="bi bi-journals"></i>
+          <% } %>
+        </div>
+        <div class="detail-card-content">
+          <span class="detail-card-label">
+            <%= contenu.type === 'ANIME' ? 'Saisons' : 'Chapitres' %>
+          </span>
+          <span class="detail-card-value">
+            <%= contenu.type === 'ANIME'
+              ? contenu.nb_saisons + ' saison(s)'
+              : contenu.nb_chapitres + ' chapitres' %>
+          </span>
+        </div>
+      </div>
+
+      <% if (contenu.type === 'ANIME') { %>
+        <div class="detail-card">
+          <div class="detail-card-icon"><i class="bi bi-stopwatch"></i></div>
+          <div class="detail-card-content">
+            <span class="detail-card-label">Durée épisode</span>
+            <span class="detail-card-value"><%= contenu.duree_episode %> min</span>
+          </div>
+        </div>
+      <% } %>
+
+      <div class="detail-card">
+        <div class="detail-card-icon"><i class="bi bi-shield-check"></i></div>
+        <div class="detail-card-content">
+          <span class="detail-card-label">Âge recommandé</span>
+          <span class="detail-card-value detail-card-age"><%= contenu.age_recommande %>+</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-icon"><i class="bi bi-calendar-event"></i></div>
+        <div class="detail-card-content">
+          <span class="detail-card-label">Date de sortie</span>
+          <span class="detail-card-value"><%= contenu.date_sortie %></span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-icon"><i class="bi bi-activity"></i></div>
+        <div class="detail-card-content">
+          <span class="detail-card-label">Statut</span>
+          <span class="detail-card-value <%= contenu.statut === 'EN_COURS' ? 'status-ongoing' : 'status-done' %>">
+            <%= contenu.statut === 'EN_COURS' ? 'En cours' : 'Terminé' %>
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/script.js"></script>
+  <script>
+    function addToWatchLater(contenuId) {
+      fetch('/profile/watchlater/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contenu_id: contenuId })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          const btn = document.querySelector('.btn-add-list');
+          btn.innerHTML = '<i class="bi bi-check"></i> Added!';
+          btn.classList.add('btn-added');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

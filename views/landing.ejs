@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OTACORE</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body class="landing-body">
+
+  <%- include('partials/navbar') %>
+
+  <!-- HERO -->
+  <section class="hero">
+    <% if (featured) { %>
+    <div class="hero-bg" style="background-image: url('<%= featured.image_url %>')"></div>
+    <% } else { %>
+    <div class="hero-bg hero-bg-default"></div>
+    <% } %>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badges">
+        <span class="hero-badge-pill">#1 Trending</span>
+        <span class="hero-badge-pill hero-badge-grey">ULTRA HD</span>
+      </div>
+      <% if (featured) { %>
+        <h1 class="hero-title">
+          <%= featured.titre.split(' ')[0] %>
+          <span><%= featured.titre.split(' ').slice(1).join(' ') %></span>
+        </h1>
+        <div class="hero-meta">
+          <span class="match-score"><%= featured.match %>% Match</span>
+          <span class="meta-dot"></span>
+          <span><%= featured.annee %></span>
+          <span class="meta-dot"></span>
+          <span class="meta-tag"><%= featured.classification %></span>
+          <span class="meta-dot"></span>
+          <span><%= featured.genres.join(' • ') %></span>
+        </div>
+        <p class="hero-synopsis"><%= featured.synopsis %></p>
+      <% } else { %>
+        <h1 class="hero-title">Welcome to <span>OTACORE</span></h1>
+        <p class="hero-synopsis">Discover the best anime and manga titles curated just for you.</p>
+      <% } %>
+      <div class="hero-actions">
+        <a href="#" class="btn-watch">
+          <i class="bi bi-play-fill"></i> Watch Now
+        </a>
+        <a href="#" class="btn-mylist">
+          <i class="bi bi-plus"></i> My List
+        </a>
+        <a href="#" class="btn-info">
+          <i class="bi bi-info-circle"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDING NOW -->
+  <section class="landing-section">
+    <div class="section-header">
+      <h2 class="section-title">
+        <i class="bi bi-graph-up-arrow"></i> Trending Now
+      </h2>
+      <a href="/contenu/anime" class="view-all">VIEW ALL</a>
+    </div>
+    <div class="cards-row">
+      <% if (trending.length > 0) { %>
+        <% trending.forEach(anime => { %>
+          <a href="/contenu/<%= anime.id %>" class="trend-card">
+            <img src="<%= anime.image_url %>" alt="<%= anime.titre %>"/>
+            <% if (anime.isPremium) { %>
+              <span class="badge-premium">Premium</span>
+            <% } %>
+            <div class="trend-card-overlay">
+              <div class="trend-card-name"><%= anime.titre %></div>
+            </div>
+          </a>
+        <% }) %>
+      <% } else { %>
+        <p class="empty-msg">Content loading soon...</p>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- TOP MANGA -->
+  <section class="landing-section">
+    <div class="section-header">
+      <h2 class="section-title">
+        <i class="bi bi-book"></i> Top Manga to Read
+      </h2>
+      <a href="/contenu/manga" class="view-all">VIEW ALL</a>
+    </div>
+    <div class="cards-row">
+      <% if (topManga.length > 0) { %>
+        <% topManga.forEach(manga => { %>
+          <a href="/contenu/<%= manga.id %>" class="manga-card" style="position:relative;">
+            <img src="<%= manga.image_url %>" alt="<%= manga.titre %>"/>
+            <% if (manga.isNew) { %>
+              <span class="badge-new">New</span>
+            <% } %>
+            <div class="manga-card-info">
+              <div class="manga-card-title"><%= manga.titre %></div>
+              <div class="manga-card-meta"><%= manga.meta %></div>
+            </div>
+          </a>
+        <% }) %>
+      <% } else { %>
+        <p class="empty-msg">Content loading soon...</p>
+      <% } %>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/script.js"></script>
+</body>
+</html>

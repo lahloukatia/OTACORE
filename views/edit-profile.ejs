@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OTACORE - Edit Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body class="landing-body">
+
+  <%- include('partials/navbar') %>
+
+  <section class="edit-profile-section">
+    <div class="edit-profile-card">
+
+      <h1 class="edit-profile-title">
+        <i class="bi bi-pencil-square"></i> Edit Profile
+      </h1>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert-error">
+          <i class="bi bi-exclamation-circle"></i> <%= error %>
+        </div>
+      <% } %>
+
+      <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert-success">
+          <i class="bi bi-check-circle"></i> <%= success %>
+        </div>
+      <% } %>
+
+      <form action="/profile/edit" method="POST">
+
+        <!-- Avatar preview -->
+        <div class="edit-avatar-preview">
+          <div class="edit-avatar">
+            <%= user.username.substring(0, 2).toUpperCase() %>
+          </div>
+          <span class="edit-avatar-hint">
+            Avatar generated from your username
+          </span>
+        </div>
+
+        <!-- Username -->
+        <div class="form-group">
+          <label>Username</label>
+          <div class="input-wrapper">
+            <i class="bi bi-person input-icon"></i>
+            <input type="text" name="username"
+                   value="<%= user.username %>" required/>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrapper">
+            <i class="bi bi-envelope input-icon"></i>
+            <input type="email" name="email"
+                   value="<%= user.email || '' %>"/>
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="form-group">
+          <label>Bio</label>
+          <div class="input-wrapper">
+            <i class="bi bi-chat-left-text input-icon" style="top:18px;transform:none;"></i>
+            <textarea name="bio" rows="3"
+                      placeholder="Tell us about yourself..."
+                      style="padding-left:44px;"><%= user.bio || '' %></textarea>
+          </div>
+        </div>
+
+        <!-- Changer mot de passe -->
+        <div class="edit-section-divider">
+          <span>Change Password (optional)</span>
+        </div>
+
+        <div class="form-group">
+          <label>Current Password</label>
+          <div class="input-wrapper">
+            <i class="bi bi-lock input-icon"></i>
+            <input type="password" name="currentPassword"
+                   placeholder="Enter current password"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>New Password</label>
+          <div class="input-wrapper">
+            <i class="bi bi-lock-fill input-icon"></i>
+            <input type="password" name="newPassword"
+                   placeholder="Enter new password"/>
+          </div>
+        </div>
+
+        <div class="edit-profile-btns">
+          <button type="submit" class="btn-signup">
+            <i class="bi bi-check-lg"></i> Save Changes
+          </button>
+          <a href="/profile" class="btn-cancel">
+            Cancel
+          </a>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/script.js"></script>
+</body>
+</html>
