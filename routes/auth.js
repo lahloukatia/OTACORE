@@ -1,16 +1,15 @@
-const express = require('express');
-const router  = express.Router();
+const express        = require('express');
+const router         = express.Router();
+const authController = require('../controllers/authController');
 
-// GET - Afficher la page signup
-router.get('/signup', (req, res) => {
-  res.render('signup', { error: null });
-});
+router.get('/signup',  (req, res) => res.render('signup', { error: null }));
+router.get('/login',   (req, res) => res.render('login',  { error: null }));
 
-// GET - Afficher la page login
-router.get('/login', (req, res) => {
-  res.render('login', { error: null });
-});
-// Logout
+router.post('/signup', authController.signup);
+router.post('/login',  authController.login);
+router.post('/verify', authController.verify);
+router.get('/resend',  authController.resend);
+
 router.get('/logout', (req, res) => {
   req.session.destroy();
   res.redirect('/');
