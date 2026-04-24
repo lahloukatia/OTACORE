@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `contenus`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contenus` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `titre` varchar(200) NOT NULL,
   `type` enum('ANIME','MANGA') NOT NULL,
   `synopsis` text,
@@ -43,6 +43,17 @@ CREATE TABLE `contenus` (
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+CREATE TABLE `password_resets` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(100) NOT NULL,
+  `token` VARCHAR(255) NOT NULL,
+  `expires_at` DATETIME NOT NULL,
+  `used` TINYINT(1) NOT NULL DEFAULT 0,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_reset_email` (`email`),
+  INDEX `idx_reset_token` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 --
 -- Dumping data for table `contenus`
 --
@@ -54,6 +65,31 @@ INSERT INTO `contenus` VALUES (1,'Demon Slayer','ANIME','Tanjiro Kamado devient 
 UNLOCK TABLES;
 
 --
+-- Table structure for table `genres`
+--
+
+DROP TABLE IF EXISTS `genres`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `genres` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `libelle` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `libelle` (`libelle`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `genres`
+--
+
+LOCK TABLES `genres` WRITE;
+/*!40000 ALTER TABLE `genres` DISABLE KEYS */;
+INSERT INTO `genres` VALUES (1,'Action'),(2,'Adventure'),(3,'Comedy'),(4,'Drama'),(5,'Fantasy'),(13,'Historical'),(6,'Horror'),(15,'Mecha'),(17,'Music'),(7,'Mystery'),(14,'Psychological'),(8,'Romance'),(9,'Sci-Fi'),(19,'Seinen'),(20,'Shoujo'),(18,'Shounen'),(10,'Slice of Life'),(16,'Sports'),(11,'Supernatural'),(12,'Thriller');
+/*!40000 ALTER TABLE `genres` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `contenus_genres`
 --
 
@@ -61,8 +97,8 @@ DROP TABLE IF EXISTS `contenus_genres`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contenus_genres` (
-  `contenu_id` int NOT NULL,
-  `genre_id` int NOT NULL,
+  `contenu_id` int unsigned NOT NULL,
+  `genre_id` int unsigned NOT NULL,
   PRIMARY KEY (`contenu_id`,`genre_id`),
   KEY `genre_id` (`genre_id`),
   CONSTRAINT `contenus_genres_ibfk_1` FOREIGN KEY (`contenu_id`) REFERENCES `contenus` (`id`) ON DELETE CASCADE,
@@ -81,60 +117,6 @@ INSERT INTO `contenus_genres` VALUES (1,1),(2,1),(3,1),(5,1),(6,1),(7,1),(8,1),(
 UNLOCK TABLES;
 
 --
--- Table structure for table `genres`
---
-
-DROP TABLE IF EXISTS `genres`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `genres` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `libelle` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `libelle` (`libelle`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `genres`
---
-
-LOCK TABLES `genres` WRITE;
-/*!40000 ALTER TABLE `genres` DISABLE KEYS */;
-INSERT INTO `genres` VALUES (1,'Action'),(2,'Adventure'),(3,'Comedy'),(4,'Drama'),(5,'Fantasy'),(13,'Historical'),(6,'Horror'),(15,'Mecha'),(17,'Music'),(7,'Mystery'),(14,'Psychological'),(8,'Romance'),(9,'Sci-Fi'),(19,'Seinen'),(20,'Shoujo'),(18,'Shounen'),(10,'Slice of Life'),(16,'Sports'),(11,'Supernatural'),(12,'Thriller');
-/*!40000 ALTER TABLE `genres` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `historique`
---
-
-DROP TABLE IF EXISTS `historique`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `historique` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `contenu_id` int NOT NULL,
-  `date_consultation` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `contenu_id` (`contenu_id`),
-  CONSTRAINT `historique_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `utilisateurs` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `historique_ibfk_2` FOREIGN KEY (`contenu_id`) REFERENCES `contenus` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `historique`
---
-
-LOCK TABLES `historique` WRITE;
-/*!40000 ALTER TABLE `historique` DISABLE KEYS */;
-/*!40000 ALTER TABLE `historique` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `utilisateurs`
 --
 
@@ -142,7 +124,7 @@ DROP TABLE IF EXISTS `utilisateurs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `utilisateurs` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
   `mot_de_passe` varchar(255) NOT NULL,
@@ -174,7 +156,7 @@ DROP TABLE IF EXISTS `verification_codes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `verification_codes` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
   `code` varchar(6) NOT NULL,
   `expires_at` datetime NOT NULL,
@@ -194,6 +176,35 @@ LOCK TABLES `verification_codes` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `historique`
+--
+
+DROP TABLE IF EXISTS `historique`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `historique` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int unsigned NOT NULL,
+  `contenu_id` int unsigned NOT NULL,
+  `date_consultation` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `contenu_id` (`contenu_id`),
+  CONSTRAINT `historique_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `utilisateurs` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `historique_ibfk_2` FOREIGN KEY (`contenu_id`) REFERENCES `contenus` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `historique`
+--
+
+LOCK TABLES `historique` WRITE;
+/*!40000 ALTER TABLE `historique` DISABLE KEYS */;
+/*!40000 ALTER TABLE `historique` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `watch_later`
 --
 
@@ -201,9 +212,9 @@ DROP TABLE IF EXISTS `watch_later`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `watch_later` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `contenu_id` int NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int unsigned NOT NULL,
+  `contenu_id` int unsigned NOT NULL,
   `statut_suivi` enum('PLANIFIE','EN_COURS','TERMINE') DEFAULT 'PLANIFIE',
   `date_ajout` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),

@@ -15,43 +15,51 @@
 
   <!-- ══ HERO ALÉATOIRE ══ -->
   <% if (featured) { %>
-  <section class="cat-hero">
-    <div class="details-hero-bg"
-         style="background-image: url('<%= featured.image_url %>')">
-    </div>
-    <div class="details-hero-overlay"></div>
-    <div class="cat-hero-content">
-      <div class="details-type-badge">
-        <% if (type === 'ANIME') { %>
-          <i class="bi bi-play-circle"></i> Anime
-        <% } else { %>
-          <i class="bi bi-book"></i> Manga
-        <% } %>
+    <% 
+      // featured is a Contenu with Genres array (through many-to-many)
+      const genresText = featured.Genres && featured.Genres.length > 0 
+        ? featured.Genres.map(g => g.libelle).join(' • ') 
+        : '';
+    %>
+    <section class="cat-hero">
+      <div class="details-hero-bg"
+           style="background-image: url('<%= featured.image_url %>')">
       </div>
-      <h1 class="hero-title">
-        <%= featured.titre.split(' ')[0] %>
-        <span><%= featured.titre.split(' ').slice(1).join(' ') %></span>
-      </h1>
-      <div class="hero-meta">
-        <span class="match-score"><%= featured.note %>/5 ⭐</span>
-        <span class="meta-dot"></span>
-        <span><%= featured.date_sortie %></span>
-        <span class="meta-dot"></span>
-        <span class="meta-tag"><%= featured.age_recommande %>+</span>
-        <span class="meta-dot"></span>
-        <span><%= featured.genres.join(' • ') %></span>
+      <div class="details-hero-overlay"></div>
+      <div class="cat-hero-content">
+        <div class="details-type-badge">
+          <% if (type === 'ANIME') { %>
+            <i class="bi bi-play-circle"></i> Anime
+          <% } else { %>
+            <i class="bi bi-book"></i> Manga
+          <% } %>
+        </div>
+        <h1 class="hero-title">
+          <%= featured.titre.split(' ')[0] %>
+          <span><%= featured.titre.split(' ').slice(1).join(' ') %></span>
+        </h1>
+        <div class="hero-meta">
+          <span class="match-score"><%= featured.note %>/5 ⭐</span>
+          <span class="meta-dot"></span>
+          <span><%= featured.date_sortie %></span>
+          <span class="meta-dot"></span>
+          <span class="meta-tag"><%= featured.age_recommande %>+</span>
+          <% if (genresText) { %>
+            <span class="meta-dot"></span>
+            <span><%= genresText %></span>
+          <% } %>
+        </div>
+        <p class="hero-synopsis"><%= featured.synopsis ? featured.synopsis.substring(0, 150) + '...' : '' %></p>
+        <div class="hero-actions">
+          <a href="/contenu/<%= featured.id %>" class="btn-watch">
+            <i class="bi bi-info-circle"></i> Voir Détails
+          </a>
+          <button class="btn-mylist" onclick="addToWatchLater(<%= featured.id %>)">
+            <i class="bi bi-plus"></i> My List
+          </button>
+        </div>
       </div>
-      <p class="hero-synopsis"><%= featured.synopsis.substring(0, 150) %>...</p>
-      <div class="hero-actions">
-        <a href="/contenu/<%= featured.id %>" class="btn-watch">
-          <i class="bi bi-info-circle"></i> Voir Détails
-        </a>
-        <button class="btn-mylist" onclick="addToWatchLater(<%= featured.id %>)">
-          <i class="bi bi-plus"></i> My List
-        </button>
-      </div>
-    </div>
-  </section>
+    </section>
   <% } %>
 
   <!-- ══ FILTRES ══ -->
@@ -76,9 +84,9 @@
         <select name="genre" onchange="this.form.submit()">
           <option value="">All Genres</option>
           <% genres.forEach(g => { %>
-            <option value="<%= g %>" 
-              <%= filters.genre === g ? 'selected' : '' %>>
-              <%= g %>
+            <option value="<%= g.libelle %>" 
+              <%= filters.genre === g.libelle ? 'selected' : '' %>>
+              <%= g.libelle %>
             </option>
           <% }) %>
         </select>
@@ -168,9 +176,11 @@
                 <span><%= item.date_sortie %></span>
               </div>
               <div class="cat-card-genres">
-                <% item.genres.slice(0,2).forEach(g => { %>
-                  <span class="genre-tag"><%= g %></span>
-                <% }) %>
+                <% if (item.Genres && item.Genres.length > 0) { %>
+                  <% item.Genres.slice(0,2).forEach(g => { %>
+                    <span class="genre-tag"><%= g.libelle %></span>
+                  <% }) %>
+                <% } %>
               </div>
             </div>
           </a>

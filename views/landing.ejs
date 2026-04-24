@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OTACORE</title>
+  <title>OTACORE - Stream the Multiverse</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
@@ -13,18 +13,18 @@
 
   <%- include('partials/navbar') %>
 
-  <!-- HERO -->
+  <!-- HERO SECTION -->
   <section class="hero">
     <% if (featured) { %>
-    <div class="hero-bg" style="background-image: url('<%= featured.image_url %>')"></div>
+      <div class="hero-bg" style="background-image: url('<%= featured.image_url %>')"></div>
     <% } else { %>
-    <div class="hero-bg hero-bg-default"></div>
+      <div class="hero-bg hero-bg-default"></div>
     <% } %>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="hero-badges">
-        <span class="hero-badge-pill">#1 Trending</span>
-        <span class="hero-badge-pill hero-badge-grey">ULTRA HD</span>
+        <span class="hero-badge-pill"><i class="bi bi-fire"></i> #1 Trending</span>
+        <span class="hero-badge-pill hero-badge-grey"><i class="bi bi-broadcast-pin"></i> ULTRA HD</span>
       </div>
       <% if (featured) { %>
         <h1 class="hero-title">
@@ -32,18 +32,25 @@
           <span><%= featured.titre.split(' ').slice(1).join(' ') %></span>
         </h1>
         <div class="hero-meta">
-          <span class="match-score"><%= featured.match %>% Match</span>
+          <span class="match-score"><i class="bi bi-heart-fill"></i> <%= featured.match || 98 %>% Match</span>
           <span class="meta-dot"></span>
-          <span><%= featured.annee %></span>
+          <span><i class="bi bi-calendar"></i> <%= featured.annee %></span>
           <span class="meta-dot"></span>
           <span class="meta-tag"><%= featured.classification %></span>
           <span class="meta-dot"></span>
-          <span><%= featured.genres.join(' • ') %></span>
+          <span>
+            <i class="bi bi-tags"></i>
+            <% if (featured.genres && featured.genres.length > 0) { %>
+              <%= featured.genres.map(g => g.libelle).join(' • ') %>
+            <% } else { %>
+              Aucun genre
+            <% } %>
+          </span>
         </div>
         <p class="hero-synopsis"><%= featured.synopsis %></p>
       <% } else { %>
-        <h1 class="hero-title">Welcome to <span>OTACORE</span></h1>
-        <p class="hero-synopsis">Discover the best anime and manga titles curated just for you.</p>
+        <h1 class="hero-title">Welcome, <span><%= user?.username || 'Anime Lover' %></span></h1>
+        <p class="hero-synopsis">Dive into your personalized journey through the multiverse of anime and manga.</p>
       <% } %>
       <div class="hero-actions">
         <a href="#" class="btn-watch">
@@ -59,58 +66,193 @@
     </div>
   </section>
 
-  <!-- TRENDING NOW -->
+  <!-- POPULAR NOW SECTION -->
   <section class="landing-section">
     <div class="section-header">
       <h2 class="section-title">
-        <i class="bi bi-graph-up-arrow"></i> Trending Now
+        <i class="bi bi-star-fill"></i> Popular Now
       </h2>
       <a href="/contenu/anime" class="view-all">VIEW ALL</a>
     </div>
     <div class="cards-row">
-      <% if (trending.length > 0) { %>
-        <% trending.forEach(anime => { %>
+      <% if (trending && trending.length > 0) { %>
+        <% trending.slice(0, 8).forEach((anime, idx) => { %>
           <a href="/contenu/<%= anime.id %>" class="trend-card">
+            <div class="trend-card-rank"><%= idx + 1 %></div>
             <img src="<%= anime.image_url %>" alt="<%= anime.titre %>"/>
             <% if (anime.isPremium) { %>
-              <span class="badge-premium">Premium</span>
+              <span class="badge-premium"><i class="bi bi-crown-fill"></i> Premium</span>
             <% } %>
             <div class="trend-card-overlay">
               <div class="trend-card-name"><%= anime.titre %></div>
+              <div class="trend-card-rating">
+                <i class="bi bi-star-fill"></i> <%= anime.rating || '8.5' %>
+              </div>
             </div>
           </a>
         <% }) %>
       <% } else { %>
-        <p class="empty-msg">Content loading soon...</p>
+        <p class="empty-msg"><i class="bi bi-hourglass-split"></i> Content loading soon...</p>
       <% } %>
     </div>
   </section>
 
-  <!-- TOP MANGA -->
+  <!-- GENRES SHOWCASE -->
+  <section class="landing-section" style="background: rgba(8,0,16,0.5);">
+    <h2 class="section-title" style="margin-bottom: 40px; text-align: center;">
+      <i class="bi bi-collection"></i> Browse by Genre
+    </h2>
+    <div class="genres-showcase-grid">
+      <a href="/contenu/anime?genre=action" class="genre-showcase-card">
+        <i class="bi bi-lightning-fill"></i>
+        <span>Action</span>
+      </a>
+      <a href="/contenu/anime?genre=romance" class="genre-showcase-card">
+        <i class="bi bi-heart-fill"></i>
+        <span>Romance</span>
+      </a>
+      <a href="/contenu/anime?genre=comedy" class="genre-showcase-card">
+        <i class="bi bi-emoji-smile"></i>
+        <span>Comedy</span>
+      </a>
+      <a href="/contenu/anime?genre=supernatural" class="genre-showcase-card">
+        <i class="bi bi-mystify"></i>
+        <span>Supernatural</span>
+      </a>
+      <a href="/contenu/anime?genre=psychological" class="genre-showcase-card">
+        <i class="bi bi-brain"></i>
+        <span>Psychological</span>
+      </a>
+      <a href="/contenu/anime?genre=scifi" class="genre-showcase-card">
+        <i class="bi bi-rocket-fill"></i>
+        <span>Sci-Fi</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- NEW RELEASES -->
+ <!-- Trending Anime -->
+<section class="landing-section">
+  <div class="section-header">
+    <h2 class="section-title"><i class="fas fa-fire"></i> Anime tendance</h2>
+    <a href="/contenu/anime" class="view-all">Voir tout <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <% if (trending.length > 0) { %>
+    <div class="cards-row">
+      <% trending.forEach(anime => { %>
+        <a href="/contenu/<%= anime.id %>" class="trend-card">
+          <img src="<%= anime.image_url || '/images/default-cover.jpg' %>" alt="<%= anime.titre %>"/>
+          <div class="trend-card-overlay">
+            <div class="trend-card-name"><%= anime.titre %></div>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="empty-msg">Aucun anime disponible.</p>
+  <% } %>
+</section>
+
+<!-- Top Manga – same structure -->
+<section class="landing-section">
+  <div class="section-header">
+    <h2 class="section-title"><i class="fas fa-book"></i> Top Manga</h2>
+    <a href="/contenu/manga" class="view-all">Voir tout <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <% if (topManga.length > 0) { %>
+    <div class="cards-row">
+      <% topManga.forEach(manga => { %>
+        <a href="/contenu/<%= manga.id %>" class="trend-card">
+          <img src="<%= manga.image_url || '/images/default-cover.jpg' %>" alt="<%= manga.titre %>"/>
+          <div class="trend-card-overlay">
+            <div class="trend-card-name"><%= manga.titre %></div>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="empty-msg">Aucun manga disponible.</p>
+  <% } %>
+</section>
+
+  <!-- RECOMMENDED FOR YOU -->
+  <section class="landing-section" style="background: linear-gradient(135deg, rgba(100,0,200,0.08) 0%, transparent 100%);">
+    <div class="section-header">
+      <h2 class="section-title">
+        <i class="bi bi-heart"></i> Recommended For You
+      </h2>
+      <a href="/contenu/anime" class="view-all">EXPLORE MORE</a>
+    </div>
+    <div class="cards-row">
+      <% if (trending && trending.length > 0) { %>
+        <% trending.slice(0, 8).forEach(anime => { %>
+          <a href="/contenu/<%= anime.id %>" class="recommend-card">
+            <div class="recommend-card-img">
+              <img src="<%= anime.image_url %>" alt="<%= anime.titre %>"/>
+              <div class="recommend-overlay"></div>
+              <button class="add-to-list-btn" title="Add to list">
+                <i class="bi bi-plus"></i>
+              </button>
+            </div>
+            <h3 class="recommend-card-title"><%= anime.titre.substring(0, 20) %><% if(anime.titre.length > 20) { %>...<% } %></h3>
+            <p class="recommend-card-meta"><%= anime.genres?.[0] || 'Anime' %></p>
+          </a>
+        <% }) %>
+      <% } else { %>
+        <p class="empty-msg">Loading recommendations...</p>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- TOP MANGA SECTION -->
   <section class="landing-section">
     <div class="section-header">
       <h2 class="section-title">
-        <i class="bi bi-book"></i> Top Manga to Read
+        <i class="bi bi-book"></i> Top Manga
       </h2>
       <a href="/contenu/manga" class="view-all">VIEW ALL</a>
     </div>
-    <div class="cards-row">
-      <% if (topManga.length > 0) { %>
-        <% topManga.forEach(manga => { %>
-          <a href="/contenu/<%= manga.id %>" class="manga-card" style="position:relative;">
-            <img src="<%= manga.image_url %>" alt="<%= manga.titre %>"/>
-            <% if (manga.isNew) { %>
-              <span class="badge-new">New</span>
-            <% } %>
-            <div class="manga-card-info">
-              <div class="manga-card-title"><%= manga.titre %></div>
-              <div class="manga-card-meta"><%= manga.meta %></div>
+    <div class="manga-grid-row">
+      <% if (topManga && topManga.length > 0) { %>
+        <% topManga.slice(0, 6).forEach(manga => { %>
+          <a href="/contenu/<%= manga.id %>" class="manga-card-enhanced">
+            <div class="manga-card-img-wrapper">
+              <img src="<%= manga.image_url %>" alt="<%= manga.titre %>"/>
+              <% if (manga.isNew) { %>
+                <span class="badge-new"><i class="bi bi-star-fill"></i> New</span>
+              <% } %>
+              <div class="manga-card-hover-overlay">
+                <button class="manga-read-btn">
+                  <i class="bi bi-book-fill"></i> Start Reading
+                </button>
+              </div>
+            </div>
+            <div class="manga-card-info-enhanced">
+              <h3 class="manga-card-title"><%= manga.titre %></h3>
+              <p class="manga-card-author"><%= manga.author || 'Unknown' %></p>
+              <p class="manga-card-meta"><%= manga.chapters || '0' %> Chapters</p>
             </div>
           </a>
         <% }) %>
       <% } else { %>
-        <p class="empty-msg">Content loading soon...</p>
+        <p class="empty-msg">Manga content loading soon...</p>
       <% } %>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="landing-cta-section">
+    <div class="cta-content-wrapper">
+      <h2>Ready for Your Next Adventure?</h2>
+      <p>Explore our vast collection of anime and manga. Your next favorite is waiting.</p>
+      <div class="cta-buttons">
+        <a href="/contenu/anime" class="btn-cta-primary">
+          <i class="bi bi-play-fill"></i> Browse Anime
+        </a>
+        <a href="/contenu/manga" class="btn-cta-secondary">
+          <i class="bi bi-book"></i> Read Manga
+        </a>
+      </div>
     </div>
   </section>
 
@@ -118,5 +260,19 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/script.js"></script>
+  <script>
+    // Add to list functionality
+    document.querySelectorAll('.add-to-list-btn, .manga-read-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const card = btn.closest('.recommend-card') || btn.closest('.manga-card-enhanced');
+        if (card) {
+          const title = card.querySelector('.recommend-card-title, .manga-card-title').textContent;
+          alert('Added to list: ' + title);
+        }
+      });
+    });
+  </script>
 </body>
 </html>

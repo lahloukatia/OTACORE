@@ -191,7 +191,7 @@ exports.verify = async (req, res) => {
     // Créer le compte
     const pendingUser = req.session.pendingUser;
     if (!pendingUser) {
-      return res.redirect('/auth/signup');
+      return res.redirect('/contenu');
     }
 
     const user = await Utilisateur.create(pendingUser);
@@ -215,7 +215,137 @@ exports.verify = async (req, res) => {
     res.render('verify', { email: req.body.email, error: err.message });
   }
 };
+// ── FORGOT PASSWORD ──────────────────────────
+exports.showForgotPassword = (req, res) => {
+  res.render('forgot-password', { error: null, success: null });
+};
 
+exports.sendResetLink = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Check if user exists
+    const user = await Utilisateur.findOne({ where: { email } });
+    if (!user) {
+      return res.render('forgot-password', { error: 'Aucun compte avec cet email', success: null });
+    }
+
+    // Generate token
+    const crypto = require('crypto');
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
+
+    // Delete old tokens for this email
+    await sequelize.query(
+      'DELETE FROM password_resets WHERE email = ?',
+      { replacements: [email], type: QueryTypes.DELETE }
+    );
+
+    // Insert new token
+    await sequelize.query(
+      'INSERT INTO password_resets (email, token, expires_at) VALUES (?, ?, ?)',
+      { replacements: [email, token, expiresAt], type: QueryTypes.INSERT }
+    );
+
+    // Send email
+    const resetUrl = `${req.protocol}://${req.get('host')}/auth/reset-password/${token}`;
+    await transporter.sendMail({
+      from: `"OTACORE" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: 'Réinitialisation de votre mot de passe',
+      html: `
+        <h2>Réinitialisation de mot de passe</h2>
+        <p>Vous avez demandé la réinitialisation de votre mot de passe pour votre compte OTACORE.</p>
+        <p>Cliquez sur le lien ci-dessous (valable 30 minutes) :</p>
+        <a href="${resetUrl}" style="display:inline-block; background:#7c3aed; color:white; padding:10px 20px; border-radius:5px; text-decoration:none;">
+          Réinitialiser mon mot de passe
+        </a>
+        <p>Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>
+      `
+    });
+
+    res.render('forgot-password', {
+      success: 'Un lien de réinitialisation a été envoyé à votre adresse email.',
+      error: null
+    });
+  } catch (err) {
+    console.error('Erreur forgot password :', err);
+    res.render('forgot-password', { error: 'Une erreur est survenue.', success: null });
+  }
+};
+
+exports.showResetForm = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    // Find valid token
+    const [rows] = await sequelize.query(
+      'SELECT * FROM password_resets WHERE token = ? AND used = FALSE AND expires_at > NOW()',
+      { replacements: [token], type: QueryTypes.SELECT }
+    );
+
+    if (!rows || rows.length === 0) {
+      return res.render('reset-password', { token, error: 'Lien invalide ou expiré.', success: null });
+    }
+
+    res.render('reset-password', { token, error: null, success: null });
+  } catch (err) {
+    console.error('Erreur reset form :', err);
+    res.render('reset-password', { token: '', error: 'Erreur serveur.', success: null });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+      return res.render('reset-password', { token, error: 'Les mots de passe ne correspondent pas.', success: null });
+    }
+
+    if (password.length < 8) {
+      return res.render('reset-password', { token, error: 'Le mot de passe doit contenir au moins 8 caractères.', success: null });
+    }
+
+    // Find token
+    const [rows] = await sequelize.query(
+      'SELECT * FROM password_resets WHERE token = ? AND used = FALSE AND expires_at > NOW()',
+      { replacements: [token], type: QueryTypes.SELECT }
+    );
+
+    if (!rows || rows.length === 0) {
+      return res.render('reset-password', { token, error: 'Lien invalide ou expiré.', success: null });
+    }
+
+    const email = rows[0].email;
+
+    // Hash new password
+    const bcrypt = require('bcrypt');
+    const hash = await bcrypt.hash(password, 10);
+
+    // Update user password
+    await Utilisateur.update(
+      { mot_de_passe: hash },
+      { where: { email } }
+    );
+
+    // Mark token as used
+    await sequelize.query(
+      'UPDATE password_resets SET used = TRUE WHERE token = ?',
+      { replacements: [token], type: QueryTypes.UPDATE }
+    );
+
+    res.render('reset-password', {
+      token,
+      success: 'Votre mot de passe a été modifié avec succès. Vous pouvez maintenant vous connecter.',
+      error: null
+    });
+  } catch (err) {
+    console.error('Erreur reset password :', err);
+    res.render('reset-password', { token: req.params.token, error: 'Erreur serveur.', success: null });
+  }
+};
 // ── RENVOYER CODE ────────────────────────────
 exports.resend = async (req, res) => {
   try {

@@ -3,10 +3,15 @@ const path     = require('path');
 const session  = require('express-session');
 require('dotenv').config();
 
+// Initialize database from schema
+const initDatabase = require('./database/init');
+
 // Import BDD
-require('./models/index');
+const { sequelize } = require('./models/index');
 
 const app = express();
+
+
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -26,7 +31,25 @@ app.use('/auth',    require('./routes/auth'));
 app.use('/profile', require('./routes/profile'));
 app.use('/contenu', require('./routes/contenu'));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`✅ OTACORE running → http://localhost:${PORT}`);
-});
+
+// Start server after database initialization
+async function startServer() {
+  try {
+    // Initialize database from SQL schema
+    await initDatabase();
+    
+    // Test Sequelize connection
+    await sequelize.authenticate();
+    console.log('🔗 Sequelize connected to database');
+    
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`✅ OTACORE running → http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Centre d’aide – OTACORE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="help-body">
+
+  <!-- Navigation -->
+  <nav class="help-nav">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo-icon"><i class="fas fa-dragon"></i></div>
+      <span class="nav-brand-name">OTACORE</span>
+    </a>
+    <div class="home-nav-right">
+      <a href="/auth/login" class="btn-login-nav">Connexion</a>
+      <a href="/auth/signup" class="btn-signup-nav">Inscription</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="help-hero">
+    <div class="help-hero-overlay"></div>
+    <div class="help-hero-content">
+      <h1>Comment pouvons-nous vous aider ?</h1>
+      <p>Trouvez des réponses, des guides et des astuces pour profiter au maximum d’OTACORE.</p>
+      <div class="help-search" id="helpSearch">
+        <i class="fas fa-search"></i>
+        <input type="text" id="helpSearchInput" placeholder="Rechercher une question..." />
+      </div>
+      <div id="search-results-info" style="display:none; margin-top:16px; text-align:center; font-size:0.9rem; color:rgba(255,255,255,0.8);"></div>
+    </div>
+  </section>
+
+  <!-- Quick access cards -->
+  <section class="help-quick-access">
+    <div class="quick-access-grid">
+      <a href="#getting-started" class="quick-access-card">
+        <div class="qa-icon"><i class="fas fa-rocket"></i></div>
+        <h3>Premiers pas</h3>
+        <p>Créer un compte, naviguer, découvrir</p>
+      </a>
+      <a href="#account" class="quick-access-card">
+        <div class="qa-icon"><i class="fas fa-user-circle"></i></div>
+        <h3>Compte & Profil</h3>
+        <p>Gérer vos infos, mot de passe, bio</p>
+      </a>
+      <a href="#anime-manga" class="quick-access-card">
+        <div class="qa-icon"><i class="fas fa-play-circle"></i></div>
+        <h3>Anime & Manga</h3>
+        <p>Streaming, catalogue, filtres</p>
+      </a>
+      <a href="#watchlist" class="quick-access-card">
+        <div class="qa-icon"><i class="fas fa-list-check"></i></div>
+        <h3>Watchlist</h3>
+        <p>Ajouter, suivre, organiser</p>
+      </a>
+      <a href="#technical" class="quick-access-card">
+        <div class="qa-icon"><i class="fas fa-headset"></i></div>
+        <h3>Support technique</h3>
+        <p>Problèmes courants, contact</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section class="help-faq">
+    <div class="faq-container">
+
+      <!-- Category: Premiers pas -->
+      <div class="faq-category" id="getting-started">
+        <h2 class="faq-category-title"><i class="fas fa-rocket"></i> Premiers pas</h2>
+        <div class="faq-items">
+          <div class="faq-item">
+            <button class="faq-question">Comment créer un compte ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Cliquez sur « Inscription » en haut à droite, remplissez le formulaire avec un pseudo, email, mot de passe et date de naissance. Un code de vérification vous sera envoyé par email. Entrez ce code pour activer votre compte.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">Je n’ai pas reçu le code de vérification<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Vérifiez vos spams. Si rien n’arrive, cliquez sur « Renvoyer le code » sur la page de vérification. Sinon, contactez le support.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">Comment naviguer sur le site ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Utilisez la barre de navigation en haut. "Accueil" montre les tendances, "Anime" et "Manga" ouvrent le catalogue. Cliquez sur une carte pour voir les détails.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category: Compte & Profil -->
+      <div class="faq-category" id="account">
+        <h2 class="faq-category-title"><i class="fas fa-user-circle"></i> Compte & Profil</h2>
+        <div class="faq-items">
+          <div class="faq-item">
+            <button class="faq-question">Comment modifier ma bio ou mon pseudo ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Allez sur votre profil (cliquez sur votre avatar), puis « Modifier le profil ». Changez les champs et enregistrez.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">Puis-je changer mon mot de passe ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Cette fonctionnalité sera disponible prochainement. Pour l’instant, contactez l’admin si besoin.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">Que faire si j’ai oublié mon mot de passe ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Utilisez le lien « Mot de passe oublié » sur la page de connexion. Un email de réinitialisation vous sera envoyé (bientôt disponible).</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category: Anime & Manga -->
+      <div class="faq-category" id="anime-manga">
+        <h2 class="faq-category-title"><i class="fas fa-play-circle"></i> Anime & Manga</h2>
+        <div class="faq-items">
+          <div class="faq-item">
+            <button class="faq-question">Comment rechercher un anime/manga ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Utilisez la barre de recherche en haut. Tapez le titre et appuyez sur Entrée. Vous pouvez aussi filtrer par genre, statut, note dans le catalogue.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">Comment lire les détails d’un contenu ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Cliquez sur l’image ou le titre d’un anime/manga. Vous verrez le synopsis, les genres, la note et des boutons d’action.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">Y a-t-il des contenus pour adultes ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Certains contenus sont classifiés « ADULTE ». Si votre compte est mineur, l’accès est restreint automatiquement.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category: Watchlist -->
+      <div class="faq-category" id="watchlist">
+        <h2 class="faq-category-title"><i class="fas fa-list-check"></i> Watchlist</h2>
+        <div class="faq-items">
+          <div class="faq-item">
+            <button class="faq-question">Comment ajouter un anime/manga à ma liste ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Sur la page détails, cliquez sur « Ajouter à ma liste ». Vous pourrez choisir l’état (Planifié, En cours, Terminé).</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">Comment suivre ma progression ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Dans votre liste (« My List »), changez le statut en cliquant sur le menu déroulant à côté de chaque titre.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category: Support technique -->
+      <div class="faq-category" id="technical">
+        <h2 class="faq-category-title"><i class="fas fa-headset"></i> Support technique</h2>
+        <div class="faq-items">
+          <div class="faq-item">
+            <button class="faq-question">Le site se charge lentement, que faire ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Vérifiez votre connexion internet. Essayez de rafraîchir la page avec Ctrl+F5. Si le problème persiste, signalez-le via le formulaire de contact.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">Comment signaler un bug ?<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer"><p>Envoyez un email à support@otacore.com en décrivant le problème et en joignant une capture d’écran si possible.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="help-contact">
+    <h2>Contactez-nous</h2>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+        <h3>Email</h3>
+        <p>support@otacore.com</p>
+        <a href="mailto:support@otacore.com" class="contact-link">Envoyer un message</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fab fa-discord"></i></div>
+        <h3>Discord</h3>
+        <p>Rejoignez notre communauté</p>
+        <a href="#" class="contact-link">Ouvrir Discord</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fab fa-twitter"></i></div>
+        <h3>Twitter</h3>
+        <p>Suivez-nous pour les actus</p>
+        <a href="#" class="contact-link">@otacore_anime</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="help-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo-icon" style="margin-bottom:12px;"><i class="fas fa-dragon"></i></div>
+        <span class="nav-brand-name">OTACORE</span>
+        <p>Streaming anime & manga depuis 2024. Toute la culture otaku au même endroit.</p>
+      </div>
+      <div class="footer-col">
+        <h6>Navigation</h6>
+        <ul>
+          <li><a href="/">Accueil</a></li>
+          <li><a href="/contenu/anime">Anime</a></li>
+          <li><a href="/contenu/manga">Manga</a></li>
+          <li><a href="/help">Aide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h6>Compte</h6>
+        <ul>
+          <li><a href="/auth/login">Connexion</a></li>
+          <li><a href="/auth/signup">Inscription</a></li>
+          <li><a href="/profile">Profil</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h6>Légal</h6>
+        <ul>
+          <li><a href="#">Confidentialité</a></li>
+          <li><a href="#">Conditions</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 OTACORE – Fait avec <i class="fas fa-heart" style="color:#7c3aed;"></i> par la team otaku.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Accordion logic
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        // Close other open items in the same category
+        const category = item.closest('.faq-category');
+        if (category) {
+          category.querySelectorAll('.faq-item.open').forEach(openItem => {
+            if (openItem !== item) openItem.classList.remove('open');
+          });
+        }
+        item.classList.toggle('open');
+      });
+    });
+
+    // Search highlight
+    const searchInput = document.getElementById('helpSearchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        const query = this.value.trim().toLowerCase();
+        const faqItems = document.querySelectorAll('.faq-item');
+        const categories = document.querySelectorAll('.faq-category');
+        const infoDiv = document.getElementById('search-results-info');
+        let totalVisible = 0;
+
+        if (query === '') {
+          // Show all
+          faqItems.forEach(item => item.style.display = 'block');
+          categories.forEach(cat => cat.style.display = 'block');
+          infoDiv.style.display = 'none';
+          // Remove highlights
+          document.querySelectorAll('.faq-question, .faq-answer p').forEach(el => {
+            el.innerHTML = el.innerHTML.replace(/<mark>/g, '').replace(/<\/mark>/g, '');
+          });
+          return;
+        }
+
+        // Hide categories and items
+        categories.forEach(cat => cat.style.display = 'block');
+        faqItems.forEach(item => {
+          const question = item.querySelector('.faq-question').textContent.toLowerCase();
+          const answer = item.querySelector('.faq-answer p') ? item.querySelector('.faq-answer p').textContent.toLowerCase() : '';
+          if (question.includes(query) || answer.includes(query)) {
+            item.style.display = 'block';
+            totalVisible++;
+            // Highlight
+            const qBtn = item.querySelector('.faq-question');
+            const aPara = item.querySelector('.faq-answer p');
+            if (qBtn) qBtn.innerHTML = qBtn.textContent.replace(new RegExp(query, 'gi'), match => `<mark>${match}</mark>`);
+            if (aPara) aPara.innerHTML = aPara.textContent.replace(new RegExp(query, 'gi'), match => `<mark>${match}</mark>`);
+          } else {
+            item.style.display = 'none';
+          }
+        });
+
+        // Hide empty categories
+        categories.forEach(cat => {
+          const visibleItems = cat.querySelectorAll('.faq-item[style*="display: block"]');
+          if (visibleItems.length === 0) cat.style.display = 'none';
+        });
+
+        // Show info
+        infoDiv.style.display = 'block';
+        infoDiv.textContent = totalVisible > 0 ? `${totalVisible} résultat(s) trouvé(s)` : 'Aucun résultat. Essayez un autre terme.';
+        if (totalVisible === 0) {
+          categories.forEach(cat => cat.style.display = 'block');
+        }
+      });
+    }
+
+    // Smooth scroll pour quick access
+    document.querySelectorAll('.quick-access-card[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>

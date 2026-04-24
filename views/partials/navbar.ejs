@@ -14,10 +14,12 @@
   </ul>
 
   <div class="nav-right">
-    <div class="search-bar">
-      <i class="bi bi-search"></i>
-      <input type="text" placeholder="Search anime, manga..." id="searchInput"/>
-    </div>
+    <form class="search-bar" action="/recherche" method="GET" style="display:flex; align-items:center; gap:8px;">
+      <i class="fas fa-search" style="color:var(--muted);"></i>
+      <input type="text" name="q" placeholder="Rechercher un anime ou manga..."
+         style="background:none; border:none; color:white; outline:none; width:100%; font-size:0.9rem;"
+         value=""/>
+    </form>
     <a href="#" class="nav-icon-btn">
       <i class="bi bi-bell"></i>
     </a>
@@ -29,3 +31,30 @@
     <% } %>
   </div>
 </nav>
+
+<div class="chat-widget">
+  <button id="chatToggle" class="chat-toggle-button" type="button" aria-label="Open chat">
+    <i class="bi bi-chat-dots-fill"></i>
+  </button>
+
+  <aside id="chatPanel" class="chat-panel" aria-hidden="true">
+    <div class="chat-header">
+      <div>
+        <h3>OTACORE Chat</h3>
+        <p>Ask a question and get an answer.</p>
+      </div>
+      <button id="chatClose" class="chat-close-btn" type="button" aria-label="Close chat">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div id="chatMessages" class="chat-messages">
+      <div class="chat-bubble assistant">Hi there ! i am the officiel otacore assistant powered by Local AI .</div>
+    </div>
+
+    <form id="chatForm" class="chat-form">
+      <input id="chatInput" type="text" placeholder="Ask something..." autocomplete="off" />
+      <button type="submit" aria-label="Send message"><i class="bi bi-send-fill"></i></button>
+    </form>
+  </aside>
+</div>
