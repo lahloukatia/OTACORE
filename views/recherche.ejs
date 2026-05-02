@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Recherche – OTACORE</title>
-  <link rel="stylesheet" href="/css/style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
 </head>
 <body class="landing-body">
 
@@ -15,17 +15,29 @@
   <section class="landing-section" style="margin-top:60px;">
     <div class="section-header">
       <h2 class="section-title">
-        <i class="bi bi-search"></i> Résultats pour "<%= query %>"
+        <i class="bi bi-search"></i> Résultats pour «&nbsp;<%= query %>&nbsp;»
       </h2>
       <span class="filters-count"><%= results.length %> résultat(s)</span>
     </div>
+
+    <!-- Suggestion "Did you mean?" -->
+    <% if (suggestion && suggestion.toLowerCase() !== query.toLowerCase()) { %>
+      <div class="suggestion-bar" style="margin-bottom:20px; padding:12px 16px; background:rgba(124,58,237,0.15); border-left:4px solid #7c3aed; border-radius:8px; color:rgba(255,255,255,0.85); font-size:0.95rem;">
+        <i class="fas fa-lightbulb" style="color:#facc15; margin-right:6px;"></i>
+        Vouliez-vous dire&nbsp;:
+        <a href="/recherche?q=<%= encodeURIComponent(suggestion) %>" style="color:#c084fc; font-weight:600; text-decoration:underline;">
+          <%= suggestion %>
+        </a>
+        &nbsp;?
+      </div>
+    <% } %>
 
     <% if (results.length > 0) { %>
       <div class="catalogue-grid">
         <% results.forEach(item => { %>
           <a href="/contenu/<%= item.id %>" class="cat-card">
             <div class="cat-card-img">
-              <img src="<%= item.image_url || '/images/default-cover.jpg' %>" alt="<%= item.titre %>"/>
+              <img src="<%= item.image_url || '/images/default-cover.jpg' %>" alt="<%= item.titre %>" />
               <div class="cat-card-overlay">
                 <span class="cat-card-rating">
                   <i class="bi bi-star-fill"></i> <%= item.note %>
@@ -40,7 +52,7 @@
                 <span><%= item.date_sortie %></span>
               </div>
               <div class="cat-card-genres">
-                <% if (item.Genres) { %>
+                <% if (item.Genres && item.Genres.length > 0) { %>
                   <% item.Genres.slice(0,3).forEach(g => { %>
                     <span class="genre-tag"><%= g.libelle %></span>
                   <% }) %>
@@ -53,7 +65,15 @@
     <% } else { %>
       <div class="empty-catalogue" style="padding:60px 20px;">
         <i class="bi bi-search" style="font-size:3rem; opacity:0.2;"></i>
-        <p>Aucun résultat pour "<%= query %>".</p>
+        <p>Aucun résultat pour «&nbsp;<%= query %>&nbsp;».</p>
+        <% if (suggestion) { %>
+          <p style="margin-top:10px; color:rgba(255,255,255,0.6);">
+            Essayer plutôt&nbsp;:
+            <a href="/recherche?q=<%= encodeURIComponent(suggestion) %>" style="color:#c084fc; font-weight:600;">
+              <%= suggestion %>
+            </a>
+          </p>
+        <% } %>
         <a href="/landing" class="btn btn-outline" style="margin-top:20px;">
           <i class="bi bi-arrow-left"></i> Retour à l'accueil
         </a>
@@ -62,6 +82,7 @@
   </section>
 
   <%- include('partials/footer') %>
+
   <script src="/js/script.js"></script>
 </body>
 </html>

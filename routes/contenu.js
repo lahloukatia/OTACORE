@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Op } = require('sequelize');
-const { Contenu, Genre } = require('../models');
+const { Contenu, Genre, Historique } = require('../models');
 
 // Helper to get current user
 function getUser(req) {
@@ -183,21 +183,27 @@ router.get('/manga', async (req, res) => {
   }
 });
 
-// ── Page Détails ─────────────────────────
 router.get('/:id', async (req, res) => {
   try {
     const contenu = await Contenu.findByPk(req.params.id, {
       include: [{ model: Genre, through: { attributes: [] } }],
     });
 
-    if (!contenu) {
-      return res.redirect('/');
+    if (!contenu) return res.redirect('/');
+
+    // Record visit if user is logged in
+    if (req.session?.user) {
+      await Historique.create({
+        user_id: req.session.user.id,
+        contenu_id: contenu.id,
+        date_consultation: new Date()
+      });
     }
 
     res.render('details', {
       contenu,
-      user: getUser(req),
-      page: '',
+      user: req.session?.user || { username: 'TestUser' },
+      page: ''
     });
   } catch (error) {
     console.error('Erreur details :', error);

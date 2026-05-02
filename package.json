@@ -17,7 +17,10 @@
     "ejs": "^5.0.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
-    "mysql2": "^3.20.0",
+    "multer": "^2.1.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.22.3",
+    "node-cron": "^4.2.1",
     "nodemailer": "^8.0.5",
     "sequelize": "^6.37.8"
   },

@@ -2,6 +2,7 @@ const express  = require('express');
 const path     = require('path');
 const session  = require('express-session');
 require('dotenv').config();
+require('./services/scheduler');   // starts the cron job
 
 // Initialize database from schema
 const initDatabase = require('./database/init');
@@ -30,7 +31,7 @@ app.use('/',        require('./routes/index'));
 app.use('/auth',    require('./routes/auth'));
 app.use('/profile', require('./routes/profile'));
 app.use('/contenu', require('./routes/contenu'));
-
+app.use('/notifications', require('./routes/notifications'));
 
 // Start server after database initialization
 async function startServer() {

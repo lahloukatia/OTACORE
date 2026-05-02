@@ -20,9 +20,23 @@
          style="background:none; border:none; color:white; outline:none; width:100%; font-size:0.9rem;"
          value=""/>
     </form>
-    <a href="#" class="nav-icon-btn">
-      <i class="bi bi-bell"></i>
-    </a>
+    <!-- Notification Bell + Dropdown -->
+<div id="notificationContainer" style="position:relative;">
+  <a href="#" id="notificationBell" class="nav-icon-btn" style="position:relative;">
+    <i class="bi bi-bell"></i>
+    <span id="notificationBadge" class="badge bg-danger" style="display:none; position:absolute; top:-5px; right:-5px; font-size:0.6rem; min-width:16px; height:16px; border-radius:8px; text-align:center; line-height:16px;">0</span>
+  </a>
+  <!-- Dropdown -->
+  <div id="notificationDropdown" style="display:none; position:absolute; top:45px; right:0; width:320px; max-height:400px; overflow-y:auto; background:#1a1a26; border-radius:10px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 10px 30px rgba(0,0,0,0.5); z-index:999;">
+    <div style="padding:12px 15px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+      <strong style="color:white; font-size:0.9rem;">Notifications</strong>
+      <button id="markAllReadBtn" style="background:none; border:none; color:#7c3aed; font-size:0.8rem; cursor:pointer;">Tout marquer lu</button>
+    </div>
+    <div id="notificationList" style="padding:5px;">
+      <div style="padding:15px; text-align:center; color:rgba(255,255,255,0.5);">Chargement...</div>
+    </div>
+  </div>
+</div>
     <!-- Toujours afficher l'avatar car navbar = pages connectées uniquement -->
     <% if (typeof user !== 'undefined' && user) { %>
       <a href="/profile" class="avatar">

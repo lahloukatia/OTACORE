@@ -1,9 +1,10 @@
-const sequelize  = require('../config/database');
+const sequelize = require('../config/database');
 const Utilisateur = require('./Utilisateur');
-const Contenu     = require('./Contenu');
-const Genre       = require('./Genre');
-const WatchLater  = require('./WatchLater');
-const Historique  = require('./Historique');
+const Contenu = require('./Contenu');
+const Genre = require('./Genre');
+const WatchLater = require('./WatchLater');
+const Historique = require('./Historique');
+const Notification = require('./Notification');   // ← new
 
 // ── Associations ──────────────────────────────
 // Contenu ↔ Genre (many to many)
@@ -23,11 +24,23 @@ Genre.belongsToMany(Contenu, {
 // Utilisateur ↔ WatchLater
 Utilisateur.hasMany(WatchLater, { foreignKey: 'user_id' });
 WatchLater.belongsTo(Utilisateur, { foreignKey: 'user_id' });
-WatchLater.belongsTo(Contenu,     { foreignKey: 'contenu_id' });
+WatchLater.belongsTo(Contenu, { foreignKey: 'contenu_id' });
 
 // Utilisateur ↔ Historique
 Utilisateur.hasMany(Historique, { foreignKey: 'user_id' });
 Historique.belongsTo(Utilisateur, { foreignKey: 'user_id' });
-Historique.belongsTo(Contenu,     { foreignKey: 'contenu_id' });
+Historique.belongsTo(Contenu, { foreignKey: 'contenu_id' });
 
-module.exports = { sequelize, Utilisateur, Contenu, Genre, WatchLater, Historique };
+// Utilisateur ↔ Notification  ← new
+Utilisateur.hasMany(Notification, { foreignKey: 'user_id' });
+Notification.belongsTo(Utilisateur, { foreignKey: 'user_id' });
+
+module.exports = {
+  sequelize,
+  Utilisateur,
+  Contenu,
+  Genre,
+  WatchLater,
+  Historique,
+  Notification   // ← export it
+};
